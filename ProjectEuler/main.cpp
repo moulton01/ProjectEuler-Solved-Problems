@@ -8,6 +8,9 @@ int SumOfMultiplesOfThreeAndFive();
 int SumOfEvenFibonacci(); 
 bool isPrime(long num);
 long long largestPrimeFactor(long long num);
+bool IsPalindromic(int sum, vector<int> reverseArray, vector<int> normalArray);
+int calculateNumberOfDigits(int number);
+void largestPalidromicNumber(); 
 
 int main(){
 
@@ -15,7 +18,7 @@ int main(){
 	long long numToCheck = 600851475143;
 	int input; 
 	do{
-	cout << "1. Problem One: Sum of multiples of 3 and 5?\n2.Even Fibonacci Numbers?\n3. Largest Prime Factor?\n";
+	cout << "1.Problem One: Sum of multiples of 3 and 5?\n2.Even Fibonacci Numbers?\n3.Largest Prime Factor?\n4.Largest Palidromic Number, from the product of two 3 digit numbers?\n";
 	cin >> input; 
 
 		switch (input){
@@ -28,8 +31,11 @@ int main(){
 		case 3:
 			cout << "The largest prime factor of " << numToCheck << " is: " << largestPrimeFactor(numToCheck) << endl;
 			break;
+		case 4: 
+			cout << "The largest Palidromic Number, made from the product of 3 digit numbers is: ";
+			largestPalidromicNumber(); cout << "\n"; 
 		default:
-			cout << "invalid input";
+			cout << "invalid input\n";
 			break; 
 
 		}
@@ -55,6 +61,64 @@ int SumOfMultiplesOfThreeAndFive()
 	}
 	return SumOfMultiples; 
 
+}
+void largestPalidromicNumber()
+{
+	vector<int> arrayToReverse;
+	vector<int> normalArray;
+
+	int largestPalindrome = 0, temp;
+
+	for (int i = 100; i < 1000; i++)
+	{
+		for (int j = 100; j < 1000; j++)
+		{
+			temp = i * j;
+			if (IsPalindromic(temp, arrayToReverse, normalArray))
+			{
+				if (temp > largestPalindrome)
+				{
+					largestPalindrome = temp;
+				}
+			}
+		}
+	}
+	cout << largestPalindrome << endl;
+	arrayToReverse.clear(); 
+	normalArray.clear(); 
+}
+bool IsPalindromic(int sum, vector<int> reverseArray, vector<int> normalArray)
+{
+	int temp = sum;
+	int OriginalNum = sum;
+
+
+	for (int div = pow(10, calculateNumberOfDigits(OriginalNum) - 1); div > 0; div /= 10)
+	{
+		int calc = (temp / div) % 10;
+		reverseArray.insert(reverseArray.begin(), calc);
+		normalArray.push_back(calc);
+	}
+	for (int i = 0; i < normalArray.size(); i++)
+	{
+		if (normalArray[i] != reverseArray[i])
+		{
+			return false;
+		}
+
+	}
+	return true;
+}
+int calculateNumberOfDigits(int number)
+{
+	int counter = 0;
+	int tempInt = number;
+	while (tempInt != 0)
+	{
+		tempInt = tempInt / 10;
+		counter++;
+	}
+	return counter;
 }
 int SumOfEvenFibonacci()
 {
